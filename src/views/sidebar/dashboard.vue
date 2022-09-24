@@ -387,7 +387,7 @@ export default {
 } */
 .areaChart,
 .card-item {
-  margin: 30px 0;
+  margin: 20px 0;
 }
 .card-item {
   display: flex;

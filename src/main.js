@@ -16,10 +16,10 @@ import Index from "@/mixins/index";
 import "./plugins/apex-chart";
 import "../src/assets/css/style.css";
 import '@/assets/scss/main.scss'
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const { mockXHR } = require('../mock/article')
+//   mockXHR()
+// }
 
 Vue.use(VueI18n)
 Vue.use(VueMask);
