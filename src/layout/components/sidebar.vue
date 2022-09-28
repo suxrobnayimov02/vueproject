@@ -13,8 +13,9 @@
               to="/"
             >
               <img
-                src="@/assets/image/logotip.svg"
+                src="@/assets/image/logo/logotip.svg"
                 alt="employee"
+                style="width: 150px;"
               >
             </router-link>
           </el-menu-item>
