@@ -15,31 +15,31 @@ export function logout() {
 }
 export function index(query) {
   return request({
-    url: '/roles',
+    url: '/posts',
     method: 'get',
     params: query
   })
 }
 export function show(id) {
   return request({
-    url: '/roles/' + id,
+    url: '/posts/' + id,
     method: 'get'
   })
 }
 
 export function store(role) {
   return request({
-    url: 'roles?include=Permissions',
+    url: 'posts?include=Permissions',
     method: 'post',
     data: role
   })
 }
 
-export function update(role) {
+export function update(data) {
   return request({
-    url: 'roles/' + role.id,
+    url: 'posts',
     method: 'put',
-    data: role.data
+    data: data
   })
 }
 

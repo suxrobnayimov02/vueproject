@@ -16,6 +16,22 @@ export function fetchArticle(id) {
   })
 }
 
+export function update(query) {
+  return request({
+    url: '/posts',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fetchPostArticle(id) {
+  return request({
+    url: '/posts/',
+    method: 'get',
+    params: { id }
+  })
+}
+
 export function fetchPv(pv) {
   return request({
     url: '/article/pv',

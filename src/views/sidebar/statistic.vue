@@ -125,7 +125,7 @@
       </tbody>
     </table>
     <el-pagination 
-      v-model:currentPage="filter.page"
+      :current-page="filter.page"
       :total="comments.total" 
       layout="prev, pager, next" 
       :page-size="comments.per_page" 

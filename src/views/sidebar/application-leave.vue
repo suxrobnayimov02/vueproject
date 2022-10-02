@@ -529,6 +529,6 @@ export default {
 </script>
 <style scoped>
 .dashboard {
-  margin-top: 95px;
+  margin-top: 72px;
 }
 </style>

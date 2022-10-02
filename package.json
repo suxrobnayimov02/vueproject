@@ -24,6 +24,7 @@
     "sweetalert2": "^11.4.8",
     "v-mask": "^2.3.0",
     "v-uppercase": "^1.0.1",
+    "validate": "^5.2.0",
     "vue": "^2.6.14",
     "vue-apexcharts": "^1.6.2",
     "vue-count-to": "^1.0.13",

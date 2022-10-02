@@ -15,10 +15,3 @@ export function getComments_id(id) {
 	})
 }
 
-export function districts(query) {
-  return request({
-    url: '/citizen/getcities/${query.region_id}',
-    method: 'get',
-    params: query
-  })
-}

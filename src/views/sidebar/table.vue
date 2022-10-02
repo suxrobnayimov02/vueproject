@@ -13,7 +13,7 @@
           @keyup.enter="openFullScreen"
         >
           <el-option
-            v-for="post in comments"
+            v-for="post in posts"
             :key="post.title"
             :label="post.title"
             :value="post.title"
@@ -73,14 +73,14 @@
 
           <tbody>
             <tr 
-              v-for="(post, item) in comments" 
+              v-for="(post, item) in posts" 
               :key="item"
             >
               <td class="border text-center">
                 {{ item + 1 }}
               </td>
               <td class="border text-center">
-                {{ post.name }}
+                {{ post.title }}
               </td>
               <td 
                 class="border text-center" 
@@ -92,72 +92,150 @@
                 class="border text-center" 
                 filter-placement="bottom-end"
               >
-                <template>
-                  <el-tooltip 
-                    content="Button center"
-                    placement="top"
-                  >
-                    <el-tag 
-                      class="el-tag" 
-                      type="success"
-                    >
-                      Button
-                    </el-tag>
-                  </el-tooltip>
-                </template>
+                <el-button
+                  type="primary"
+                  size="small"
+                  @click="dialogTableVisible = true"
+                >
+                  <i class="el-icon-edit" />
+                </el-button>
               </td>
             </tr>
           </tbody>
         </table>
-        <!-- <el-dialog
-          title="Tips"
-          v-model='dialogVisible'
+        <el-dialog
+          :visible="dialogTableVisible"
+          title="Tahrirlash"
           width="30%"
           :before-close="handleClose"
         >
-          
-          <span>Text</span>
+          <span>
+            <el-form
+              ref="dataForm"
+              :model="temp"
+            >
+              <el-form-item 
+                label="Title" 
+                prop="title"
+              >
+                <el-input v-model="temp.title" />
+              </el-form-item>
+              <el-form-item 
+                label="Body"
+                prop="body"
+              >
+                <el-input v-model="temp.body" />
+              </el-form-item>
+            </el-form>
+          </span>
           <span 
+            slot="footer"
             class="dialog-footer"
           >
-            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button @click="dialogTableVisible = false">Bekor qilish</el-button>
             <el-button 
               type="primary" 
-              @click="dialogVisible = false"
-            >Confirm</el-button>
+              @click="save"
+            >Saqlash</el-button>
           </span>
-        </el-dialog> -->
+        </el-dialog>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import { update } from '@/api/article'
 export default {
   name: 'InlineEditTable',
 
   data() {
     return {
-      dialogVisible: false,
-      comments: [],
+      dialogTableVisible: false,
+      posts: [],
       selectValue: [],
       fullscreenLoading: false,
       list: null,
       listLoading: true,
-      listQuery: {
+      filter: {
+        user_id: null,
+        per_page: 5,
         page: 1,
-        limit: 10
-      }
+        filter: 'interested',
+        salary: null,
+      },
+      listQuery: {
+        limit: 20,
+        importance: undefined,
+        title: undefined,
+        name: undefined,
+        type: undefined,
+        sort: '+id'
+      },
+      temp: {
+        id: undefined,
+        importance: 1,
+        title: '',
+        body: '',
+        timestamp: new Date()
+      },
     }
   },
-  async mounted() {
-    const res = await fetch('https://jsonplaceholder.typicode.com/comments')
-    const comments = await res.json()
-    this.comments = comments
-  },
 
+  mounted() {
+    this.fetchPosts()
+  },
+  created(){
+    this.getList()
+  },
   methods: {
+    fetchPosts() {
+      fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => {
+        return response.json();
+      })
+      .then((posts) => {
+        this.posts = posts;
+      })
+    },
+    getList() {
+      this.isLoading = false
+      update(this.listQuery).then(response => {
+        this.list = response.name
+        this.total = response.total
+
+        setTimeout(() => {
+          this.isLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row)
+      this.temp.timestamp = new Date(this.temp.timestamp)
+      
+    },  
+    sendFilter() {
+      this.filter.page = 1
+      this.getVacancies()
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter()
+    },
     getColor(completed) {
       if (completed === true) return 'success'
       else return 'danger'
@@ -178,9 +256,29 @@ export default {
         // eslint-disable-next-line no-unused-vars
         .then((_) => {
           done()
+          this.dialogTableVisible = false
         })
         // eslint-disable-next-line no-unused-vars
         .catch((_) => {})
+    },
+    save() {
+      // eslint-disable-next-line no-undef
+      if (this.temp.title !== '' && this.temp.body !== '') {
+        this.$notify({
+          title: 'Success',
+          message: 'This is a success message',
+          type: 'success'
+        });
+
+        this.dialogTableVisible = false
+      }else {
+        this.$notify({
+          title: 'Error',
+          message: 'This is a error message',
+          type: 'error'
+        });
+      }
+      
     }
   }
 }
