@@ -112,19 +112,20 @@
           <span>
             <el-form
               ref="dataForm"
-              :model="temp"
+              :model="form"
+              :rules="rules"
             >
               <el-form-item 
                 label="Title" 
                 prop="title"
               >
-                <el-input v-model="temp.title" />
+                <el-input v-model="form.title" />
               </el-form-item>
               <el-form-item 
                 label="Body"
                 prop="body"
               >
-                <el-input v-model="temp.body" />
+                <el-input v-model="form.body" />
               </el-form-item>
             </el-form>
           </span>
@@ -135,7 +136,7 @@
             <el-button @click="dialogTableVisible = false">Bekor qilish</el-button>
             <el-button 
               type="primary" 
-              @click="save"
+              @submit.prevent="save"
             >Saqlash</el-button>
           </span>
         </el-dialog>
@@ -145,15 +146,15 @@
 </template>
 
 <script>
-import { update } from '@/api/article'
+import { fetchUpdate } from '@/api/article'
 export default {
   name: 'InlineEditTable',
 
   data() {
     return {
+      selectValue: '',
       dialogTableVisible: false,
       posts: [],
-      selectValue: [],
       fullscreenLoading: false,
       list: null,
       listLoading: true,
@@ -164,20 +165,27 @@ export default {
         filter: 'interested',
         salary: null,
       },
-      listQuery: {
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        name: undefined,
-        type: undefined,
-        sort: '+id'
-      },
-      temp: {
+      form: {
         id: undefined,
         importance: 1,
         title: '',
         body: '',
         timestamp: new Date()
+      },
+      rules: {
+        title: [
+          { required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
+        ],
+        body: [
+          { required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
+        ]
+      },
+      listQuery: {
+        limit: 20,
+        importance: undefined,
+        name: undefined,
+        type: undefined,
+        sort: '+id'
       },
     }
   },
@@ -200,7 +208,7 @@ export default {
     },
     getList() {
       this.isLoading = false
-      update(this.listQuery).then(response => {
+      fetchUpdate(this.listQuery).then(response => {
         this.list = response.name
         this.total = response.total
 
@@ -214,8 +222,8 @@ export default {
       this.getList()
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row)
-      this.temp.timestamp = new Date(this.temp.timestamp)
+      this.form = Object.assign({}, row)
+      this.form.timestamp = new Date(this.form.timestamp)
       
     },  
     sendFilter() {
@@ -263,7 +271,7 @@ export default {
     },
     save() {
       // eslint-disable-next-line no-undef
-      if (this.temp.title !== '' && this.temp.body !== '') {
+      if (this.form.title !== '' && this.form.body !== '') {
         this.$notify({
           title: 'Success',
           message: 'This is a success message',

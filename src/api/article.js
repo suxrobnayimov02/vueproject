@@ -16,7 +16,7 @@ export function fetchArticle(id) {
   })
 }
 
-export function update(query) {
+export function fetchUpdate(query) {
   return request({
     url: '/posts',
     method: 'get',

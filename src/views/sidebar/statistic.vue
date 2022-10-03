@@ -124,13 +124,6 @@
         </tr>
       </tbody>
     </table>
-    <el-pagination 
-      :current-page="filter.page"
-      :total="comments.total" 
-      layout="prev, pager, next" 
-      :page-size="comments.per_page" 
-      @current-change="handleCurrentChange" 
-    />
     <b-modal 
       id="modal-center" 
       centered
@@ -142,13 +135,22 @@
         ref="dataForm"
         :model="temp"
       >
-        <el-form-item prop="name">
+        <el-form-item 
+          prop="name" 
+          label="Name"
+        >
           <el-input v-model="temp.name" />
         </el-form-item>
-        <el-form-item prop="email">
+        <el-form-item 
+          prop="email"
+          label="Email"
+        >
           <el-input v-model="temp.email" />
         </el-form-item>
-        <el-form-item prop="body">
+        <el-form-item 
+          prop="body"
+          label="Textarea"
+        >
           <el-input 
             v-model="temp.body" 
             :rows="4"
@@ -209,7 +211,6 @@ export default {
   },
   mounted() {
     this.fetchComments()
-    this.fetchVacancies(this.filter)
   },
   created() {
     this.getList()
@@ -263,21 +264,8 @@ export default {
       }
       this.handleFilter()
     },
-    handleCurrentChange(page) {
-      this.filter.page = page
-      this.getVacancies()
-    },
-    async getVacancies() {
-      this.isLoading = true
-      await this.fetchVacancies(this.filter)
-      this.isLoading = false
-    },
-    open2() {
-      this.$message({
-        message: 'Congrats, this is a success message.',
-        type: 'success'
-      });
-    }
+    
+    
   }
 };
 </script>
