@@ -21,8 +21,8 @@
                 <b>
                   <count-to
                     :start-val="0"
-                    :end-val="3600"
-                    :duration="3600"
+                    :end-val="6310"
+                    :duration="6310"
                   />
                 </b>
               </div>
@@ -117,7 +117,7 @@
         :gutter="20"
       >
         <el-col 
-          :span="8" 
+          :span="12" 
           class="dashboard-list donut_chart"
         >
           <el-card id="chart">
@@ -129,7 +129,7 @@
             />
           </el-card>
         </el-col>
-        <el-col
+        <!-- <el-col
           :span="8"
           class="dashboard-list"
         >
@@ -141,9 +141,9 @@
               height="253"
             />
           </el-card>
-        </el-col>
+        </el-col> -->
         <el-col 
-          :span="8" 
+          :span="12" 
           class="dashboard-list bar_chart"
         >
           <el-card id="chart-circle">
@@ -173,8 +173,6 @@ export default {
 
   data() {
     return {
-      todos: [],
-      selectValue: [],
       fullscreenLoading: false,
       areaSeries: [
         {
@@ -217,20 +215,16 @@ export default {
       },
       series: [
         {
-          name: "PRODUCT A",
+          name: "ERKAKLAR",
           data: [44, 55, 41, 57, 22, 43],
         },
         {
-          name: "PRODUCT B",
+          name: "TASDIQLANGANLAR",
           data: [19, 23, 20, 25, 17, 27],
         },
         {
-          name: "PRODUCT C",
-          data: [21, 37, 28, 15, 21, 14],
-        },
-        {
-          name: "PRODUCT D",
-          data: [24, 17, 25, 19, 22, 18],
+          name: "AYOLLAR",
+          data: [9, 16, 13, 17, 11, 21],
         },
       ],
       chartOptions: {
@@ -300,58 +294,8 @@ export default {
           },
         ],
       },
-      radialSeries: [72],
-      radialChartOptions: {
-        chart: {
-          height: 350,
-          type: "radialBar",
-          offsetY: -10,
-        },
-        plotOptions: {
-          radialBar: {
-            startAngle: -135,
-            endAngle: 135,
-            dataLabels: {
-              name: {
-                fontSize: "16px",
-                color: undefined,
-                offsetY: 120,
-              },
-              value: {
-                offsetY: 76,
-                fontSize: "22px",
-                color: undefined,
-                formatter: function (val) {
-                  return val + "%";
-                },
-              },
-            },
-          },
-        },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            shadeIntensity: 0.15,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 65, 91],
-          },
-        },
-        stroke: {
-          dashArray: 4,
-        },
-        labels: ["Median Ratio"],
-      },
     };
   },
-  async mounted() {
-    const res = await fetch("https://jsonplaceholder.typicode.com/todos");
-    const todos = await res.json();
-    this.todos = todos;
-  },
-
   methods: {
     getColor(completed) {
       if (completed == true) return "success";

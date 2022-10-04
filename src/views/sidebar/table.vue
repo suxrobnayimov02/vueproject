@@ -157,7 +157,7 @@ export default {
       posts: [],
       fullscreenLoading: false,
       list: null,
-      listLoading: true,
+      listLoading: true, 
       filter: {
         user_id: null,
         per_page: 5,
@@ -198,7 +198,7 @@ export default {
   },
   methods: {
     fetchPosts() {
-      fetch('https://jsonplaceholder.typicode.com/posts')
+      fetch('https://jsonplaceholder.typicode.com/posts/')
       .then((response) => {
         return response.json();
       })
@@ -244,10 +244,6 @@ export default {
       }
       this.handleFilter()
     },
-    getColor(completed) {
-      if (completed === true) return 'success'
-      else return 'danger'
-    },
     openFullScreen() {
       const loading = this.$loading({
         lock: true,
@@ -276,8 +272,7 @@ export default {
           title: 'Success',
           message: 'This is a success message',
           type: 'success'
-        });
-
+        })
         this.dialogTableVisible = false
       }else {
         this.$notify({
@@ -286,7 +281,6 @@ export default {
           type: 'error'
         });
       }
-      
     }
   }
 }
