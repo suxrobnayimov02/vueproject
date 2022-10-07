@@ -1,63 +1,107 @@
+<!-- eslint-disable vue/no-deprecated-v-bind-sync -->
 <template>
-  <nav class="pagination-row">
-    <ul class="pagination">
-      <li class="disabled">
-        <span 
-          class="icon" 
-          aria-hidden="true"
-        >
-          <img src="/img/image/arrow-left.svg">
-        </span>
-      </li>
-      <li><a href="#">1</a></li>
-      <li class="active">
-        <a href="#">2</a>
-      </li>
-      <li><a href="#">3</a></li>
-      <li class="dots">
-        <span> ... </span>
-      </li>
-      <li><a href="#">98</a></li>
-      <li>
-        <a aria-label="Next">
-          <span aria-hidden="true">
-            <img src="/img/image/arrow-right.svg">
-          </span>
-          {{ pageCount }}
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <div 
+    :class="{'hidden':hidden}" 
+    class="pagination-container"
+  >
+    <el-pagination
+      :background="background"
+      :current-page.sync="currentPage"
+      :page-size.sync="pageSize"
+      :layout="layout"
+      :page-sizes="pageSizes"
+      :total="total"
+      v-bind="$attrs"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 
 <script>
+import { scrollTo } from '@/utils/scroll-to'
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Pagination",
+  name: 'Pagination',
   props: {
     total: {
       required: true,
-      type: Number,
+      type: Number
     },
-    perPage: {
-      required: true,
+    page: {
       type: Number,
+      default: 1
     },
-    currentPage: {
-      required: true,
+    limit: {
       type: Number,
+      default: 20
     },
-    lastPage: {
-      required: true,
-      type: Number,
+    pageSizes: {
+      type: Array,
+      default() {
+        return [10, 20, 30, 50]
+      }
     },
+    layout: {
+      type: String,
+      default: 'total, sizes, prev, pager, next, jumper'
+    },
+    background: {
+      type: Boolean,
+      default: true
+    },
+    autoScroll: {
+      type: Boolean,
+      default: true
+    },
+    hidden: {
+      type: Boolean,
+      default: false
+    }
   },
-  computed: {},
-};
+emits: ['update:page', 'update:limit', 'pagination'],
+  computed: {
+    currentPage: {
+      get() {
+        return this.page
+      },
+      set(val) {
+        this.$emit('update:page', val)
+      }
+    },
+    pageSize: {
+      get() {
+        return this.limit
+      },
+      set(val) {
+        this.$emit('update:limit', val)
+      }
+    }
+  },
+  methods: {
+    handleSizeChange(val) {
+      this.$emit('pagination', { page: this.currentPage, limit: val })
+      if (this.autoScroll) {
+        scrollTo(0, 800)
+      }
+    },
+    handleCurrentChange(val) {
+      this.$emit('pagination', { page: val, limit: this.pageSize })
+      if (this.autoScroll) {
+        scrollTo(0, 800)
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>
-.disabled span {
-  background-color: #75aee8fc !important;
+.pagination-container {
+  background: #fff;
+  padding: 32px 16px;
+}
+.pagination-container.hidden {
+  display: none;
 }
 </style>

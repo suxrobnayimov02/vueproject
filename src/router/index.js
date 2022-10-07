@@ -29,30 +29,76 @@ export const routes = [
         path: "/profile",
         component: () => import("@/views/sidebar/profile.vue"),
       },
-      // {
-      //   name: "contact",
-      //   path: "/contact",
-      //   component: () => import("@/views/sidebar/application-leave.vue"),
-      //   meta: {
-      //     title: "Ariza qoldirish",
-      //   },
-      // },
       {
-        name: "statistic",
-        path: "/statistic",
-        component: () => import("@/views/sidebar/statistic.vue"),
-        meta: "Statistika"
+        name: "comments",
+        path: "/comments",
+        component: () => import("@/views/comments/comments.vue"),
+        meta: "Comments"
       },
       {
-        name: "table",
-        path: "/table",
-        component: () => import("@/views/sidebar/table.vue"),
+        name: "posts-id",
+        path: "/comments-id",
+        component: () => import("@/views/comments/comments-copy.vue"),
         meta: {
-          title: "Table"
+          title: "Posts"
         }
+      },
+      {
+        name: "Posts",
+        path: "/posts/list",
+        component: () => import("@/views/posts/list.vue"),
+        // children: [
+        //   {
+        //     path: 'list',
+        //     component: () => import('@/views/posts/list'),
+        //     name: 'ArticleList',
+        //     meta: { title: 'Article List', icon: 'list' }
+        //   },
+        //   {
+        //     path: 'create',
+        //     component: () => import('@/views/posts/create'),
+        //     name: 'CreateArticle',
+        //     meta: { title: 'Create Article', icon: 'edit' }
+        //   },
+        //   {
+        //     path: 'edit/:id(\\d+)',
+        //     component: () => import('@/views/posts/edit'),
+        //     name: 'EditArticle',
+        //     meta: {
+        //       title: 'Edit Article',
+        //       noCache: true,
+        //       activeMenu: '/posts/list'
+        //     },
+        //     hidden: true
+        //   }
+        // ],
+        meta: {
+          title: "Posts"
+        }
+      },
+      {
+        path: '/posts/create',
+        component: () => import('@/views/posts/create'),
+        name: 'CreateArticle',
+        meta: { title: 'Create Article', icon: 'edit' }
+      },
+      
+      {
+        path: '/detail/',
+        name: 'detail',
+        component: () => import('@/views/posts-new/detail'),
+        props: true,
+      },
+      {
+        path: '/posts/index',
+        component: () => import('@/views/posts-new/index'),
+        name: 'ShowArticle',
+        meta: { title: 'Create Article', icon: 'edit' }
       },
     ],
   },
+
+
   {
     name: "login",
     path: "/login",

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/comments',
+    url: '/posts',
     method: 'get',
     params: query
   })
@@ -10,17 +10,25 @@ export function fetchList(query) {
 
 export function fetchArticle(id) {
   return request({
-    url: '/comments/',
+    url: '/posts',
     method: 'get',
     params: { id }
   })
 }
 
-export function fetchUpdate(query) {
+export function createArticle(data) {
   return request({
     url: '/posts',
-    method: 'get',
-    params: query
+    method: 'post',
+    data
+  })
+}
+
+export function updateArticle(data) {
+  return request({
+    url: '/posts',
+    method: 'post',
+    data
   })
 }
 
@@ -32,26 +40,4 @@ export function fetchPostArticle(id) {
   })
 }
 
-export function fetchPv(pv) {
-  return request({
-    url: '/article/pv',
-    method: 'get',
-    params: { pv }
-  })
-}
 
-export function createArticle(data) {
-  return request({
-    url: '/article/create',
-    method: 'post',
-    data
-  })
-}
-
-export function updateArticle(data) {
-  return request({
-    url: '/article/update',
-    method: 'post',
-    data
-  })
-}

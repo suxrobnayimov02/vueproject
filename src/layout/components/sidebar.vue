@@ -28,7 +28,7 @@
               <span>Bosh sahifa</span>
             </router-link>
           </el-menu-item>
-          <el-menu-item index="2">
+          <!-- <el-menu-item index="2">
             <router-link
               :to="{ name: 'about' }"
               class="sidebar_link"
@@ -36,35 +36,35 @@
               <i class="el-icon-collection" />
               <span>Hisobot</span>
             </router-link>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item
             index="3"
           >
             <router-link
-              :to="{ name: 'statistic' }"
+              :to="{ name: 'comments' }"
               class="sidebar_link"
             >
               <i class="el-icon-s-data" />
-              <span>Statistika</span>
+              <span>Comments</span>
             </router-link>
           </el-menu-item>
           
-          <!-- <el-menu-item index="5">
+          <el-menu-item index="5">
             <router-link
-              :to="{ name: 'contact' }"
+              :to="{ name: 'posts-id' }"
               class="sidebar_link"
             >
               <i class="el-icon-message" />
               <span>Ariza qoldirish</span>
             </router-link>
-          </el-menu-item> -->
+          </el-menu-item>
           <el-menu-item index="6">
             <router-link
-              :to="{ name: 'table' }"
+              :to="{ name: 'ShowArticle' }"
               class="sidebar_link"
             >
               <i class="el-icon-notebook-2" />
-              <span>Table</span>
+              <span>Posts</span>
             </router-link>
           </el-menu-item>
         </el-menu>

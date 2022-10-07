@@ -1,6 +1,6 @@
 
 export const getters = {
-  GET_COMMENTS: (state) => state.getComments,
+  GET_POSTS: (state) => state.getPosts,
   ITEM: (state) => state.item,
 }
   

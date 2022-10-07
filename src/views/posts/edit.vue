@@ -1,6 +1,7 @@
 <template>
   <div class="main-table app-container mt-10">
     <el-row class="select-and-download">
+      <h2>Postlar ro'yxati</h2>
       <el-col 
         :span="18" 
         label="Tanlang"
@@ -95,7 +96,7 @@
                 <el-button
                   type="primary"
                   size="small"
-                  @click="dialogTableVisible = true"
+                  @click="handleUpdate(item)"
                 >
                   <i class="el-icon-edit" />
                 </el-button>
@@ -146,7 +147,7 @@
 </template>
 
 <script>
-import { fetchUpdate } from '@/api/article'
+import { fetchList } from '@/api/article'
 export default {
   name: 'InlineEditTable',
 
@@ -208,7 +209,7 @@ export default {
     },
     getList() {
       this.isLoading = false
-      fetchUpdate(this.listQuery).then(response => {
+      fetchList(this.listQuery).then(response => {
         this.list = response.name
         this.total = response.total
 
@@ -224,6 +225,7 @@ export default {
     handleUpdate(row) {
       this.form = Object.assign({}, row)
       this.form.timestamp = new Date(this.form.timestamp)
+      this.dialogTableVisible = true
       
     },  
     sendFilter() {

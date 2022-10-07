@@ -11,7 +11,7 @@
             class=""
             style="text-transform: uppercase; padding"
           >
-            2022-yildagi statistikalar ro'yxati
+            Commentlar ro'yxati
           </h4>
         </el-col>
         <el-col :span="4">
@@ -28,12 +28,6 @@
         </el-col>
       </el-row>
     </div>
-    <!-- <el-button 
-      :plain="true" 
-      @click="open2"
-    >
-      success
-    </el-button> -->
     <div class="mb-3">
       <el-row>
         <el-col :span="8">

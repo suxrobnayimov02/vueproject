@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function getComments(query) {
+export function getPosts(query) {
   return request({
-    url: '/comments/',
+    url: '/posts/',
     method: 'get',
     params: query
   })

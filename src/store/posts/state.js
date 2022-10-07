@@ -1,5 +1,5 @@
 export const state = {
-  getComments: [],
+  getPosts: [],
   item: [],
 }
   

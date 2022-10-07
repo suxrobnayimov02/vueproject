@@ -22,11 +22,14 @@
           </div>
           <!-- <span>&nbsp; 52609025290022</span> -->
         </div>
-        <div class="d-flex align-items-center" style="margin-right: 244px;">
+        <div 
+          class="d-flex align-items-center" 
+          style="margin-right: 244px;"
+        >
           <el-dropdown>
             <span class="el-dropdown-link header-link">
-              <span style="color: #111;"> Profile</span>
-              <i class="el-icon-arrow-down el-icon--right" />
+              <span style="color: #222;"><i class="el-icon-user" /></span>
+              <i class="el-icon-arrow-down" />
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
