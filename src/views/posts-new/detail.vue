@@ -33,16 +33,20 @@
         min-width="200px"
       />
     </el-table>
-		<div class="form-detail">
+		<div 
+			class="form-detail"
+			style="margin-top: 20px;"
+			>
 			<el-form 
 				ref="form"
 				:model="form"
+				:rules="rules"
 			>
 				<el-row align="center">
-					<el-form-item style="margin-top: 30px;">
-						<h4>Comment qo'shish</h4>
+					<el-form-item>
+						<h4 align="center">Comment qo'shish</h4>
 					</el-form-item>
-					<el-col :span="14">
+					<el-col :span="24">
 						<el-form-item label="Name">
 							<el-input 
 								v-model="form.name" 
@@ -50,7 +54,7 @@
 							/>
 						</el-form-item>
 					</el-col>
-					<el-col :span="14">
+					<el-col :span="24">
 						<el-form-item label="Email">
 							<el-input 
 								v-model="form.email" 
@@ -58,7 +62,7 @@
 							/>
 						</el-form-item>
 					</el-col>
-					<el-col :span="14">
+					<el-col :span="24">
 						<el-form-item label="Body">
 							<el-input 
 								v-model="form.body" 
@@ -93,7 +97,18 @@ import axios from 'axios';
 					name: '',
 					email: '',
 					body: ''
-				}
+				},
+				rules: {
+					name: [
+						{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
+					],
+					email: [
+						{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
+					],
+					body: [
+						{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
+					]
+				},
 			}
 		},
 		created() {
@@ -153,7 +168,9 @@ import axios from 'axios';
   
 <style>
 	.form-detail {
-		width: 100%;
-		margin: 0 auto;
+		width: 50%;
+		margin: 0;
+		background-color: white;
+		padding: 40px;
 	}
 </style>

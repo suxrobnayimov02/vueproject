@@ -181,10 +181,9 @@ export default {
 			})
 		},
 		edit(row) {
-			this.temp = Object.assign({}, row) // copy obj
+			this.temp = Object.assign({}, row)
         this.temp.timestamp = new Date(this.temp.timestamp)
 				this.dialogCreateVisible = true
-        // this.dialogTableVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
