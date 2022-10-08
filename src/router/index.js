@@ -84,7 +84,7 @@ export const routes = [
       },
       
       {
-        path: '/detail/',
+        path: '/detail',
         name: 'detail',
         component: () => import('@/views/posts-new/detail'),
         props: true,

@@ -33,7 +33,10 @@
         min-width="200px"
       />
     </el-table>
-    <el-form>
+    <el-form 
+      ref="form"
+      :model="form"
+    >
       <el-row align="center">
         <el-form-item style="margin-top: 30px;">
           <h4>Comment qo'shish</h4>
@@ -41,7 +44,7 @@
         <el-col :span="14">
           <el-form-item label="Name">
             <el-input 
-              v-model="name" 
+              v-model="form.name" 
               clearable 
             />
           </el-form-item>
@@ -49,7 +52,7 @@
         <el-col :span="14">
           <el-form-item label="Email">
             <el-input 
-              v-model="email" 
+              v-model="form.email" 
               clearable 
             />
           </el-form-item>
@@ -57,21 +60,21 @@
         <el-col :span="14">
           <el-form-item label="Body">
             <el-input 
-              v-model="body" 
+              v-model="form.body" 
               type="textarea" 
               clearable
             />
           </el-form-item>
         </el-col>
       </el-row>
-      <el-button type="info">Bekor qilish</el-button>
-      <el-button type="primary">Qo'shish</el-button>
+      <el-button type="primary" @click="save">Qo'shish</el-button>
     </el-form>
   </div>
 </template>
   
 <script>
 	import Axios from "axios";
+import axios from 'axios';
 	export default {
 		// eslint-disable-next-line vue/multi-word-component-names
 		name: "ArticleShow",
@@ -84,15 +87,16 @@
 				detay: [],
 				comments: [],
 				postId:[],
-				name: '',
-				email: '',
-				body: ''
+				form: {
+					name: '',
+					email: '',
+					body: ''
+				}
 			}
 		},
 		created() {
 			this.getDetail(),
-			this.getComments(),
-			this.getUpdate()
+			this.getComments()
 		},
 		methods: {
 			getDetail() {
@@ -107,12 +111,38 @@
 					this.comments = response.data;
 				})
 			},
-			getUpdate() {
-				Axios.get(`https://jsonplaceholder.typicode.com/comments?${this.detail.postId}`)
-				.then((response) => {
-					this.postId = response.data;
+			save() {
+				if (this.validate()) {
+					axios.post(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`, this.form)
+					.then(() => {
+						this.getComments(),
+						this.form.name = ''
+						this.form.email = ''
+						this.form.body = ''
+						this.$notify({
+							title: 'Success',
+							message: 'Created Successfully',
+							type: 'success',
+							duration: 2000
+						})
+					})
+					.catch(() => {
+						this.$notify({
+							title: 'Error',
+							message: 'Created Error',
+							type: 'error',
+							duration: 2000
+						})
+					})
+				}
+			},
+			validate() {
+				let validated = false
+					this.$refs.form.validate((valid) => {
+					validated = valid
 				})
-			}
+				return validated
+			},
 		},
    
 	};

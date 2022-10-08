@@ -49,7 +49,7 @@
             </router-link>
           </el-menu-item>
           
-          <el-menu-item index="5">
+          <!-- <el-menu-item index="5">
             <router-link
               :to="{ name: 'posts-id' }"
               class="sidebar_link"
@@ -57,7 +57,7 @@
               <i class="el-icon-message" />
               <span>Ariza qoldirish</span>
             </router-link>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item index="6">
             <router-link
               :to="{ name: 'ShowArticle' }"
