@@ -1,83 +1,84 @@
 <!-- eslint-disable vue/no-deprecated-slot-scope-attribute -->
 <template>
   <div class="app" style="width: 100%; margin-right: 37px;">
-		<el-row style="width: 100%; margin-top: 100px;">
-			<el-col :span="21">
-				<h2>Postlar ro'yxati</h2>
-			</el-col>
-			<el-col :span="3">
-				<el-button type="primary" @click="create">
-					<i class="el-icon-circle-plus-outline" />
-					Post qo'shish
-				</el-button>
-			</el-col>
-		</el-row>
+    <el-row style="width: 100%; margin-top: 100px;">
+      <el-col :span="21">
+        <h2>Postlar ro'yxati</h2>
+      </el-col>
+      <el-col :span="3">
+        <el-button type="primary" @click="create">
+          <i class="el-icon-circle-plus-outline" />
+          Post qo'shish
+        </el-button>
+      </el-col>
+    </el-row>
 	
     <el-table 
       :data="data" 
       border
     >
-			<el-table-column 
-				label="ID"
-				prop="id"
-				width="60" 
-				align="center"
-			/>
+      <el-table-column 
+        label="ID"
+        prop="id"
+        width="60" 
+        align="center"
+      />
       <el-table-column 
         label="Title"
-				min-width="300px" 
-				>
-				<!-- <template slot-scope="scope">
+        min-width="300px" 
+      >
+        <!-- <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
 					<el-input v-if="edit" v-model="scope.row.title" />
         </template> -->
-				<template slot-scope="{row}">
+        <template slot-scope="{row}">
           <span>{{ row.title }}</span>
-				</template>
-			</el-table-column>
+        </template>
+      </el-table-column>
       <el-table-column 
         prop="body" 
         label="Body" 
-				min-width="400px"
+        min-width="400px"
       />
       <el-table-column 
-				label="Status"
-				min-width="200px"
-				align="center"
-				>
+        label="Status"
+        min-width="200px"
+        align="center"
+      >
         <template slot-scope="scope">
           <el-button 
-						size="medium"
-						@click="show(scope.row)" 
-					>
-						Show
-					</el-button>
+            size="medium"
+            @click="show(scope.row)" 
+          >
+            Show
+          </el-button>
           <el-button 
-						type="primary" 
-						size="medium"
-						@click="edit(scope.row)" 
-					>
-						<i class="el-icon-edit" /> 
-						Edit
-					</el-button>
+            type="primary" 
+            size="medium"
+            @click="edit(scope.row)" 
+          >
+            <i class="el-icon-edit" /> 
+            Edit
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-		<el-dialog
+    <el-dialog
       :visible="dialogCreateVisible"
       title="Post qo'shish"
       width="45%"
     >
       <el-form 
         ref="dataForm"
-				:model="temp"
+        :model="temp"
+        :rules="rules"
       >
         <el-form-item 
           label="Title"
-					prop="title"
+          prop="title"
         >
-				<el-input v-model="temp.title" />
+          <el-input v-model="temp.title" />
         </el-form-item>
         <el-form-item 
           prop="body"
@@ -101,7 +102,7 @@
         >Saqlash</el-button>
       </div>
     </el-dialog>
-		<!-- <table border>
+    <!-- <table border>
 			<thead>
 				<tr>
 					<th class="border">ID</th>
@@ -121,7 +122,7 @@
 				</tr>
 			</tbody>
 		</table> -->
-	</div>
+  </div>
 </template>
 
 <script>
@@ -137,6 +138,10 @@ export default {
 				title: '',
 				body: ''
 			},
+			rules: {
+					title: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
+					body: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
+				},
 		}
 	},
 	

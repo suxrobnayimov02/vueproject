@@ -33,48 +33,53 @@
         min-width="200px"
       />
     </el-table>
-		<div 
-			class="form-detail"
-			style="margin-top: 20px;"
-			>
-			<el-form 
-				ref="form"
-				:model="form"
-				:rules="rules"
-			>
-				<el-row align="center">
-					<el-form-item>
-						<h4 align="center">Comment qo'shish</h4>
-					</el-form-item>
-					<el-col :span="24">
-						<el-form-item label="Name">
-							<el-input 
-								v-model="form.name" 
-								clearable 
-							/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="24">
-						<el-form-item label="Email">
-							<el-input 
-								v-model="form.email" 
-								clearable 
-							/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="24">
-						<el-form-item label="Body">
-							<el-input 
-								v-model="form.body" 
-								type="textarea" 
-								clearable
-							/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-button type="primary" @click="save">Qo'shish</el-button>
-			</el-form>
-		</div>
+    <div 
+      class="form-detail"
+      style="margin-top: 20px;"
+    >
+      <el-form 
+        ref="dataForm"
+        :model="form"
+        :rules="rules"
+      >
+        <el-row align="center">
+          <el-form-item>
+            <h4 align="center">Comment qo'shish</h4>
+          </el-form-item>
+          <el-col :span="24">
+            <el-form-item label="Name">
+              <el-input 
+                v-model="form.name" 
+                clearable 
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="Email">
+              <el-input 
+                v-model="form.email" 
+                clearable 
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="Body">
+              <el-input 
+                v-model="form.body" 
+                type="textarea" 
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-button 
+          type="primary" 
+          @click="save"
+        >
+          Qo'shish
+        </el-button>
+      </el-form>
+    </div>
   </div>
 </template>
   
@@ -92,22 +97,15 @@ import axios from 'axios';
 			return {
 				detay: [],
 				comments: [],
-				postId:[],
 				form: {
 					name: '',
 					email: '',
 					body: ''
 				},
 				rules: {
-					name: [
-						{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
-					],
-					email: [
-						{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
-					],
-					body: [
-						{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }
-					]
+					name: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
+					email: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
+					body: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
 				},
 			}
 		},
@@ -129,36 +127,27 @@ import axios from 'axios';
 				})
 			},
 			save() {
-				if (this.validate()) {
-					axios.post(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`, this.form)
-					.then(() => {
-						this.getComments(),
-						this.form.name = ''
-						this.form.email = ''
-						this.form.body = ''
-						this.$notify({
-							title: 'Success',
-							message: 'Created Successfully',
-							type: 'success',
-							duration: 2000
-						})
+				axios.post(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`, this.form)
+				.then(() => {
+					this.getComments(),
+					this.form.name = ''
+					this.form.email = ''
+					this.form.body = ''
+					this.$notify({
+						title: 'Success',
+						message: 'Created Successfully',
+						type: 'success',
+						duration: 2000
 					})
-					.catch(() => {
-						this.$notify({
-							title: 'Error',
-							message: 'Created Error',
-							type: 'error',
-							duration: 2000
-						})
-					})
-				}
-			},
-			validate() {
-				let validated = false
-					this.$refs.form.validate((valid) => {
-					validated = valid
 				})
-				return validated
+				.catch(() => {
+					this.$notify({
+						title: 'Error',
+						message: 'Created Error',
+						type: 'error',
+						duration: 2000
+					})
+				})
 			},
 		},
    
