@@ -37,7 +37,7 @@
               <span>Hisobot</span>
             </router-link>
           </el-menu-item> -->
-          <el-menu-item
+          <!-- <el-menu-item
             index="3"
           >
             <router-link
@@ -47,7 +47,7 @@
               <i class="el-icon-s-data" />
               <span>Comments</span>
             </router-link>
-          </el-menu-item>
+          </el-menu-item> -->
           
           <!-- <el-menu-item index="5">
             <router-link

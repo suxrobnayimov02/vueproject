@@ -33,42 +33,44 @@
         min-width="200px"
       />
     </el-table>
-    <el-form 
-      ref="form"
-      :model="form"
-    >
-      <el-row align="center">
-        <el-form-item style="margin-top: 30px;">
-          <h4>Comment qo'shish</h4>
-        </el-form-item>
-        <el-col :span="14">
-          <el-form-item label="Name">
-            <el-input 
-              v-model="form.name" 
-              clearable 
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="14">
-          <el-form-item label="Email">
-            <el-input 
-              v-model="form.email" 
-              clearable 
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="14">
-          <el-form-item label="Body">
-            <el-input 
-              v-model="form.body" 
-              type="textarea" 
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-button type="primary" @click="save">Qo'shish</el-button>
-    </el-form>
+		<div class="form-detail">
+			<el-form 
+				ref="form"
+				:model="form"
+			>
+				<el-row align="center">
+					<el-form-item style="margin-top: 30px;">
+						<h4>Comment qo'shish</h4>
+					</el-form-item>
+					<el-col :span="14">
+						<el-form-item label="Name">
+							<el-input 
+								v-model="form.name" 
+								clearable 
+							/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="14">
+						<el-form-item label="Email">
+							<el-input 
+								v-model="form.email" 
+								clearable 
+							/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="14">
+						<el-form-item label="Body">
+							<el-input 
+								v-model="form.body" 
+								type="textarea" 
+								clearable
+							/>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-button type="primary" @click="save">Qo'shish</el-button>
+			</el-form>
+		</div>
   </div>
 </template>
   
@@ -150,4 +152,8 @@ import axios from 'axios';
 	
   
 <style>
+	.form-detail {
+		width: 100%;
+		margin: 0 auto;
+	}
 </style>
