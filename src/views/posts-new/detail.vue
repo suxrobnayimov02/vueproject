@@ -6,6 +6,8 @@
     <h4> {{ detay.title }}</h4>
     <p style="padding-right: 30px;"> {{ detay.body }}</p>
 
+    
+
     <el-table 
       :data="comments" 
       style="margin-top: 100px;"
@@ -13,7 +15,7 @@
     >
       <el-table-column 
         label="Post Id" 
-        prop="postId" 
+        prop="id" 
         width="50"
         align="center"
       />
@@ -73,10 +75,10 @@
           </el-col>
         </el-row>
         <el-button 
-          type="primary" 
-          @click="save"
+          type="primary"
+					@click="save"
         >
-          Qo'shish
+          Saqlash
         </el-button>
       </el-form>
     </div>
@@ -84,7 +86,7 @@
 </template>
   
 <script>
-	import Axios from "axios";
+import Axios from "axios";
 import axios from 'axios';
 	export default {
 		// eslint-disable-next-line vue/multi-word-component-names
@@ -110,8 +112,11 @@ import axios from 'axios';
 			}
 		},
 		created() {
-			this.getDetail(),
+			this.getDetail()
 			this.getComments()
+		},
+		mounted() {
+			this.create()
 		},
 		methods: {
 			getDetail() {
@@ -130,9 +135,9 @@ import axios from 'axios';
 				axios.post(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`, this.form)
 				.then(() => {
 					this.getComments(),
-					this.form.name = ''
-					this.form.email = ''
-					this.form.body = ''
+					// this.form.name = ''
+					// this.form.email = ''
+					// this.form.body = ''
 					this.$notify({
 						title: 'Success',
 						message: 'Created Successfully',
@@ -150,7 +155,7 @@ import axios from 'axios';
 				})
 			},
 		},
-   
+		
 	};
 </script>
 	

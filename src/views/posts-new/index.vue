@@ -29,7 +29,7 @@
       >
         <!-- <template slot-scope="scope">
           <span>{{ scope.row.title }}</span>
-					<el-input v-if="edit" v-model="scope.row.title" />
+					<el-input v-if="update" v-model="scope.row.title" />
         </template> -->
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
@@ -65,7 +65,7 @@
     </el-table>
 
     <el-dialog
-      :visible="dialogCreateVisible"
+      :visible="dialogVisible"
       title="Post qo'shish"
       width="45%"
     >
@@ -95,60 +95,44 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogCreateVisible = false">Bekor qilish</el-button>
+        <el-button @click="dialogVisible = false">Bekor qilish</el-button>
         <el-button 
           type="primary" 
           @click="save"
-        >Saqlash</el-button>
+        >
+					Saqlash
+				</el-button>
       </div>
     </el-dialog>
-    <!-- <table border>
-			<thead>
-				<tr>
-					<th class="border">ID</th>
-					<th class="border">Title</th>
-					<th class="border">Body</th>
-					<th class="border">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="data in data" :key="data.id">
-					<td class="border">{{ data.id }}</td>
-					<td class="border">{{ data.title }}</td>
-					<td class="border">{{ data.body }}</td>
-					<td class="border">
-							<el-button @click="show(row)">Show</el-button>
-					</td>
-				</tr>
-			</tbody>
-		</table> -->
   </div>
 </template>
 
 <script>
-	import axios from "axios";
+import axios from "axios";
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
 	name: 'Index',
 	data() {
 		return {
 			data: [],
-			dialogCreateVisible: false,
+			dialogVisible: false,
 			temp: {
 				title: '',
 				body: ''
 			},
 			rules: {
-					title: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
-					body: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
-				},
+        title: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
+        body: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
+      },
 		}
 	},
 	
 	created() {
+		// this.getItem()
+	},
+	mounted() {
 		this.getItem()
 	},
-	
 	methods: {
 		getItem() {
 			axios.get('https://jsonplaceholder.typicode.com/posts')
@@ -157,22 +141,24 @@ export default {
 			})
 		},
 		save() {
-			axios.post(`https://jsonplaceholder.typicode.com/posts`, this.temp)
+      axios.post(`https://jsonplaceholder.typicode.com/posts`, this.temp)
 			.then(() => {
-				this.getItem(),
-				this.temp.title = ''
-				this.temp.body = ''
-				this.dialogCreateVisible = false
+        this.getItem(),
+				// this.temp.title = ''
+				// this.temp.body = ''
+        
+				this.dialogVisible = false
 				this.$notify({
-					title: 'Success',
+          title: 'Success',
 					message: 'Created Successfully',
 					type: 'success',
 					duration: 2000
 				})
+        console.log(this.temp)
 			})
 			.catch(() => {
-				this.$notify({
-					title: 'Error',
+        this.$notify({
+          title: 'Error',
 					message: 'Created Error',
 					type: 'error',
 					duration: 2000
@@ -188,13 +174,10 @@ export default {
 		edit(row) {
 			this.temp = Object.assign({}, row)
         this.temp.timestamp = new Date(this.temp.timestamp)
-				this.dialogCreateVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
+				this.dialogVisible = true
 		},
 		create() {
-			this.dialogCreateVisible = true
+			this.dialogVisible = true
 		}
 	},
 };
