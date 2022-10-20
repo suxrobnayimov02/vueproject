@@ -3,6 +3,15 @@
     <h2 style="width: 100%; margin-right: 57px; margin-top: 100px;">
       Show
     </h2>
+
+    <router-link 
+      :to="'posts/index'"
+      class="mt-3 mb-3"
+      type="button"
+    >
+      <i class="el-icon-back" /> Back
+    </router-link>
+     
     <h4> {{ detay.title }}</h4>
     <p style="padding-right: 30px;"> {{ detay.body }}</p>
 
@@ -132,12 +141,13 @@ import axios from 'axios';
 				})
 			},
 			save() {
-				axios.post(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`, this.form)
+				axios.put(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`, this.form)
 				.then(() => {
 					this.getComments(),
-					// this.form.name = ''
-					// this.form.email = ''
-					// this.form.body = ''
+          console.log(this.getComments)
+          this.name = '',
+          this.email = '',
+          this.body = '',
 					this.$notify({
 						title: 'Success',
 						message: 'Created Successfully',

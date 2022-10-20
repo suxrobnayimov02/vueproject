@@ -95,6 +95,12 @@ export const routes = [
         name: 'ShowArticle',
         meta: { title: 'Create Article', icon: 'edit' }
       },
+      {
+        path: '/index-all',
+        component: () => import('@/views/posts-new/index-all'),
+        name: 'IndexAll',
+        meta: { title: 'Index All', icon: 'index' }
+      },
     ],
   },
 

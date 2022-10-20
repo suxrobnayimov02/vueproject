@@ -225,7 +225,6 @@ export default {
     handleUpdate(row) {
       this.form = Object.assign({}, row)
       this.form.timestamp = new Date(this.form.timestamp)
-      
     },  
     sendFilter() {
       this.filter.page = 1

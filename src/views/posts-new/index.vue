@@ -1,18 +1,23 @@
 <!-- eslint-disable vue/no-deprecated-slot-scope-attribute -->
 <template>
-  <div class="app" style="width: 100%; margin-right: 37px;">
+  <div 
+    class="app" 
+    style="width: 100%; margin-right: 37px;"
+  >
     <el-row style="width: 100%; margin-top: 100px;">
       <el-col :span="21">
         <h2>Postlar ro'yxati</h2>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="create">
+        <el-button 
+          type="primary" 
+          @click="create"
+        >
           <i class="el-icon-circle-plus-outline" />
           Post qo'shish
         </el-button>
       </el-col>
     </el-row>
-	
     <el-table 
       :data="data" 
       border
@@ -27,10 +32,6 @@
         label="Title"
         min-width="300px" 
       >
-        <!-- <template slot-scope="scope">
-          <span>{{ scope.row.title }}</span>
-					<el-input v-if="update" v-model="scope.row.title" />
-        </template> -->
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
@@ -50,23 +51,22 @@
             size="medium"
             @click="show(scope.row)" 
           >
+            <i class="el-icon-view" />
             Show
           </el-button>
           <el-button 
             type="primary" 
             size="medium"
-            @click="edit(scope.row)" 
+            @click="update(scope.row)" 
           >
-            <i class="el-icon-edit" /> 
-            Edit
+            Update
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-
     <el-dialog
       :visible="dialogVisible"
-      title="Post qo'shish"
+      :title="textMap[dialogStatus]"
       width="45%"
     >
       <el-form 
@@ -95,10 +95,14 @@
         slot="footer"
         class="dialog-footer"
       >
-        <el-button @click="dialogVisible = false">Bekor qilish</el-button>
         <el-button 
+          @click="dialogVisible = false"
+        >
+          Bekor qilish
+        </el-button>
+        <el-button
           type="primary" 
-          @click="save"
+          @click="dialogStatus==='create'?saveCreate():saveUpdate()"
         >
 					Saqlash
 				</el-button>
@@ -124,6 +128,10 @@ export default {
         title: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
         body: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
       },
+      textMap: {
+        update: 'Edit',
+        create: 'Create'
+      },
 		}
 	},
 	
@@ -140,13 +148,10 @@ export default {
 				this.data = response.data;
 			})
 		},
-		save() {
+		saveCreate() {
       axios.post(`https://jsonplaceholder.typicode.com/posts`, this.temp)
 			.then(() => {
         this.getItem(),
-				// this.temp.title = ''
-				// this.temp.body = ''
-        
 				this.dialogVisible = false
 				this.$notify({
           title: 'Success',
@@ -154,7 +159,6 @@ export default {
 					type: 'success',
 					duration: 2000
 				})
-        console.log(this.temp)
 			})
 			.catch(() => {
         this.$notify({
@@ -165,20 +169,43 @@ export default {
 				})
 			})
 		},
+    saveUpdate() {
+      axios.put(`https://jsonplaceholder.typicode.com/posts/`, this.temp)
+			.then(() => {
+        this.getItem(),
+				this.dialogVisible = false
+				this.$notify({
+          title: 'Success',
+					message: 'Update Successfully',
+					type: 'success',
+					duration: 2000
+				})
+			})
+			.catch(() => {
+        this.$notify({
+          title: 'Error',
+					message: 'Update Error',
+					type: 'error',
+					duration: 2000
+				})
+			})
+    },
 		show(row) {
 			this.$router.push({
 				name: 'detail',
 				params: { detail:row }
 			})
 		},
-		edit(row) {
-			this.temp = Object.assign({}, row)
-        this.temp.timestamp = new Date(this.temp.timestamp)
-				this.dialogVisible = true
-		},
 		create() {
 			this.dialogVisible = true
-		}
+      this.dialogStatus = 'create'
+		},
+    update(row) {
+      this.dialogStatus = 'update'
+      this.temp = Object.assign({}, row)
+      this.dialogVisible = true
+       
+    },
 	},
 };
 </script>
