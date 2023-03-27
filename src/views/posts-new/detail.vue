@@ -44,6 +44,13 @@
         min-width="200px"
       />
     </el-table>
+
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="1000">
+    </el-pagination>
+
     <div 
       class="form-detail"
       style="margin-top: 20px;"
@@ -95,7 +102,6 @@
 </template>
   
 <script>
-import Axios from "axios";
 import axios from 'axios';
 	export default {
 		// eslint-disable-next-line vue/multi-word-component-names
@@ -125,17 +131,17 @@ import axios from 'axios';
 			this.getComments()
 		},
 		mounted() {
-			this.create()
+			// this.create()
 		},
 		methods: {
 			getDetail() {
-				Axios.get(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}`)
+				axios.get(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}`)
 				.then((response) => {
 					this.detay = response.data;
 				})
 			},
 			getComments() {
-				Axios.get(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`)
+				axios.get(`https://jsonplaceholder.typicode.com/posts/${this.detail.id}/comments`)
 				.then((response) => {
 					this.comments = response.data;
 				})

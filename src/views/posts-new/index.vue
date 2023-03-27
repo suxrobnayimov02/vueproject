@@ -19,6 +19,7 @@
       </el-col>
     </el-row>
     <el-table 
+      v-loading="isLoading"
       :data="data" 
       border
     >
@@ -64,6 +65,17 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-pagination
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="120"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+
     <el-dialog
       :visible="dialogVisible"
       :title="textMap[dialogStatus]"
@@ -104,8 +116,8 @@
           type="primary" 
           @click="dialogStatus==='create'?saveCreate():saveUpdate()"
         >
-					Saqlash
-				</el-button>
+          Saqlash
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -113,6 +125,7 @@
 
 <script>
 import axios from "axios";
+import { setItem } from "@/utils/storage";
 export default {
 	// eslint-disable-next-line vue/multi-word-component-names
 	name: 'Index',
@@ -120,6 +133,10 @@ export default {
 		return {
 			data: [],
 			dialogVisible: false,
+      isLoading: true,
+      currentPage: 1,
+      perPage: 10,
+      total: 0,
 			temp: {
 				title: '',
 				body: ''
@@ -139,14 +156,26 @@ export default {
 		// this.getItem()
 	},
 	mounted() {
+    this.currentPage = 1
 		this.getItem()
 	},
 	methods: {
+    handleSizeChange() {
+
+    },
+    handleCurrentChange(page) {
+      this.page = page
+      setItem('resumePage', page)
+      this.getItem()
+    },
 		getItem() {
+      this.isLoading = true
 			axios.get('https://jsonplaceholder.typicode.com/posts')
 			.then((response) => {
-				this.data = response.data;
+        this.data = response.data;
+        this.total = response.data.limit
 			})
+        this.isLoading = false
 		},
 		saveCreate() {
       axios.post(`https://jsonplaceholder.typicode.com/posts`, this.temp)

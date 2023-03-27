@@ -117,13 +117,13 @@
               :rules="rules"
             >
               <el-form-item 
-                label="Title" 
+                label="Post sarlavhasi" 
                 prop="title"
               >
                 <el-input v-model="form.title" />
               </el-form-item>
               <el-form-item 
-                label="Body"
+                label="Batafsil ma'lumot"
                 prop="body"
               >
                 <el-input v-model="form.body" />

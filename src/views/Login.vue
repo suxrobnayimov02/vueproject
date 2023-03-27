@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login_items">
-      <h4 class="pt-2 pb-5 text-center">
+      <h4 class="pt-2 pb-3 text-center">
         Tizimga kirish uchun
         login va parolni kiriting
       </h4>
@@ -10,24 +10,23 @@
         :model="ruleForm"
         status-icon
         :rules="rules"
-        label-width="90px"
         class="demo-ruleForm login_form text-left"
         @submit.prevent="submitHandler"
       >
         <el-form-item
-          label="Login"
           prop="login"
           @keyup.enter="checkFieldsFilled()"
         >
+          <label for="">Login</label>
           <el-input
             v-model="ruleForm.login"
             class=""
           />
         </el-form-item>
         <el-form-item
-          label="Password"
           prop="password"
         >
+          <label for="">Password</label>
           <el-input
             v-model="ruleForm.password"
             type="password"
@@ -39,7 +38,7 @@
         <el-form-item>
           <el-button
             type="primary"
-            class="text-right"
+            class="text-right w-100 mt-4"
             @click="submitForm('ruleForm')"
           >
             Submit
@@ -76,7 +75,6 @@ export default {
    
 		return {
 			loading: true,
-			checked: false,
 			ruleForm: {
 				login: '',
 				password: '',
@@ -156,7 +154,7 @@ export default {
             message: 'Tizimga kirish muvafaqqiyatli amalga oshirildi '
           });
         }).catch(() => {
-        window.location.href = 'Login'
+        window.location.href = 'login'
       })
 			this.loading = true
 			// this.$router.push('/')

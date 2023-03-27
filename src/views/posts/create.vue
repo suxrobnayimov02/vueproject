@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <h2 style="margin-top: 100px;">Create</h2>
+    <h2 style="margin-top: 100px;">Post yaratish</h2>
   </div>
 </template>
 

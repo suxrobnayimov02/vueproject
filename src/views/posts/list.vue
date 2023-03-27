@@ -138,13 +138,13 @@
       >
         <el-form-item 
           prop="title" 
-          label="Title"
+          label="Post sarlavhasi"
         >
           <el-input v-model="temp.title" />
         </el-form-item>
         <el-form-item 
           prop="body"
-          label="Textarea"
+          label="Ba'tafsil ma'lumot"
         >
           <el-input 
             v-model="temp.body" 

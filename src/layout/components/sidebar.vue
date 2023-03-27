@@ -67,7 +67,7 @@
               <span>Posts</span>
             </router-link>
           </el-menu-item>
-          <el-menu-item index="5">
+          <!-- <el-menu-item index="5">
             <router-link
               :to="{ name: 'IndexAll' }"
               class="sidebar_link"
@@ -75,7 +75,7 @@
               <i class="el-icon-message" />
               <span>Index All</span>
             </router-link>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-col>
     </el-row>

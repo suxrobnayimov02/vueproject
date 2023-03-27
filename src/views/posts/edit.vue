@@ -110,6 +110,7 @@
           width="30%"
           :before-close="handleClose"
         >
+        
           <span>
             <el-form
               ref="dataForm"
@@ -117,13 +118,13 @@
               :rules="rules"
             >
               <el-form-item 
-                label="Title" 
+                label="Post sarlavhasi" 
                 prop="title"
               >
                 <el-input v-model="form.title" />
               </el-form-item>
               <el-form-item 
-                label="Body"
+                label="Batafsil"
                 prop="body"
               >
                 <el-input v-model="form.body" />

@@ -88,7 +88,7 @@ export const routes = [
         name: 'detail',
         component: () => import('@/views/posts-new/detail'),
         props: true,
-      },
+      },    
       {
         path: '/posts/index',
         component: () => import('@/views/posts-new/index'),

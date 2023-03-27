@@ -142,7 +142,7 @@ export default {
         },
       })
         .then(() => {
-          this.$router.push("Login");
+          this.$router.push("login");
           this.$message({
             type: "error",
             message: "Sizda tizim bilan uzilish yuzaga keldi! ",
