@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-menu class="headers">
+    <el-menu class="headers" style="z-index: 2;">
       <div class="header_items">
         <div class="d-flex align-items-center">
           <el-col 
@@ -35,7 +35,7 @@
               <el-dropdown-item>
                 <i class="el-icon-user-solid" />
                 <router-link 
-                  :to="{ name: 'profile' }" 
+                  :to="{ name: 'Posts' }" 
                   class=""
                 >
                   Shaxsiy kabinet
@@ -43,7 +43,7 @@
               </el-dropdown-item>
               <el-dropdown-item divided>
                 <router-link
-                  :to="{ name: 'login' }"
+                  :to="{ name: 'Posts' }"
                   class="header_nav-link"
                   style="cursor: pointer"
                 >

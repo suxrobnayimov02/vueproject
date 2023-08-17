@@ -19,7 +19,7 @@
               >
             </router-link>
           </el-menu-item>
-          <el-menu-item index="1">
+          <!-- <el-menu-item index="1">
             <router-link
               :to="{ name: 'dashboard' }"
               class="sidebar_link"
@@ -27,55 +27,34 @@
               <i class="el-icon-s-home" />
               <span>Bosh sahifa</span>
             </router-link>
-          </el-menu-item>
-          <!-- <el-menu-item index="2">
-            <router-link
-              :to="{ name: 'about' }"
-              class="sidebar_link"
-            >
-              <i class="el-icon-collection" />
-              <span>Hisobot</span>
-            </router-link>
           </el-menu-item> -->
-          <!-- <el-menu-item
-            index="3"
-          >
+          <el-menu-item index="1">
             <router-link
-              :to="{ name: 'comments' }"
-              class="sidebar_link"
-            >
-              <i class="el-icon-s-data" />
-              <span>Comments</span>
-            </router-link>
-          </el-menu-item> -->
-          
-          <!-- <el-menu-item index="5">
-            <router-link
-              :to="{ name: 'posts-id' }"
-              class="sidebar_link"
-            >
-              <i class="el-icon-message" />
-              <span>Ariza qoldirish</span>
-            </router-link>
-          </el-menu-item> -->
-          <el-menu-item index="6">
-            <router-link
-              :to="{ name: 'ShowArticle' }"
+              :to="{ name: 'Posts' }"
               class="sidebar_link"
             >
               <i class="el-icon-notebook-2" />
-              <span>Posts</span>
+              <span>Postlar</span>
             </router-link>
           </el-menu-item>
-          <!-- <el-menu-item index="5">
+          <el-menu-item index="2">
             <router-link
-              :to="{ name: 'IndexAll' }"
+              :to="{ name: 'Photos' }"
               class="sidebar_link"
             >
-              <i class="el-icon-message" />
-              <span>Index All</span>
+              <i class="el-icon-picture-outline" />
+              <span>Rasmlar</span>
             </router-link>
-          </el-menu-item> -->
+          </el-menu-item>
+          <el-menu-item index="3">
+            <router-link
+              :to="{ name: 'Tasks' }"
+              class="sidebar_link"
+            >
+              <i class="el-icon-notebook-1" />
+              <span>Vazifalar</span>
+            </router-link>
+          </el-menu-item>
         </el-menu>
       </el-col>
     </el-row>

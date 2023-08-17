@@ -7,6 +7,9 @@ import app from "./app";
 import auth from "./auth";
 
 export default new Vuex.Store({
+  state: {
+    WishList: {}
+  },
   app,
   auth
 });

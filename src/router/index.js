@@ -9,97 +9,28 @@ export const routes = [
     component: () => import("@/layout/main"),
     children: [
       {
-        name: "dashboard",
-        path: "/",
-        component: () => import("@/views/sidebar/dashboard.vue"),
+        name: "Posts",
+        path: "/posts",
+        component: () => import("@/views/posts/index.vue"),
         meta: {
           title: "Bosh sahifa",
         },
       },
       {
-        name: "about",
-        path: "/about",
-        component: () => import("@/views/sidebar/report.vue"),
+        name: "Photos",
+        path: "/photos",
+        component: () => import("@/views/photos/index.vue"),
         meta: {
-          title: "Hisobot",
+          title: "Rasmlar",
         },
       },
       {
-        name: "profile",
-        path: "/profile",
-        component: () => import("@/views/sidebar/profile.vue"),
-      },
-      {
-        name: "comments",
-        path: "/comments",
-        component: () => import("@/views/comments/comments.vue"),
-        meta: "Comments"
-      },
-      {
-        name: "posts-id",
-        path: "/comments-id",
-        component: () => import("@/views/comments/comments-copy.vue"),
+        name: "Tasks",
+        path: "/tasks",
+        component: () => import("@/views/tasks/index.vue"),
         meta: {
-          title: "Posts"
-        }
-      },
-      {
-        name: "Posts",
-        path: "/posts/list",
-        component: () => import("@/views/posts/list.vue"),
-        // children: [
-        //   {
-        //     path: 'list',
-        //     component: () => import('@/views/posts/list'),
-        //     name: 'ArticleList',
-        //     meta: { title: 'Article List', icon: 'list' }
-        //   },
-        //   {
-        //     path: 'create',
-        //     component: () => import('@/views/posts/create'),
-        //     name: 'CreateArticle',
-        //     meta: { title: 'Create Article', icon: 'edit' }
-        //   },
-        //   {
-        //     path: 'edit/:id(\\d+)',
-        //     component: () => import('@/views/posts/edit'),
-        //     name: 'EditArticle',
-        //     meta: {
-        //       title: 'Edit Article',
-        //       noCache: true,
-        //       activeMenu: '/posts/list'
-        //     },
-        //     hidden: true
-        //   }
-        // ],
-        meta: {
-          title: "Posts"
-        }
-      },
-      {
-        path: '/posts/create',
-        component: () => import('@/views/posts/create'),
-        name: 'CreateArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
-      },
-      
-      {
-        path: '/detail',
-        name: 'detail',
-        component: () => import('@/views/posts-new/detail'),
-        props: true,
-      },    
-      {
-        path: '/posts/index',
-        component: () => import('@/views/posts-new/index'),
-        name: 'ShowArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
-      },
-      {
-        path: '/index-all',
-        component: () => import('@/views/posts-new/index-all'),
-        name: 'IndexAll',
-        meta: { title: 'Index All', icon: 'index' }
+          title: "Vazifalar",
+        },
       },
     ],
   },
