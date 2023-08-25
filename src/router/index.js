@@ -17,6 +17,14 @@ export const routes = [
         },
       },
       {
+        name: "Posts",
+        path: "/posts",
+        component: () => import("@/views/posts/index.vue"),
+        meta: {
+          title: "Bosh sahifa",
+        },
+      },
+      {
         name: "Photos",
         path: "/photos",
         component: () => import("@/views/photos/index.vue"),
