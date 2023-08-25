@@ -48,10 +48,10 @@
           style="width: 100%;"
         >
           <el-option
-            v-for="item in data"
+            v-for="item in commentsList"
             :key="item.id"
-            :label="item.title"
-            :value="item.title"
+            :label="item.name"
+            :value="item.name"
           />
         </el-select>
       </el-col>
@@ -72,7 +72,7 @@
             v-for="index in getWishlist"
             :key="index.id"
             :label="index.name"
-            :value="index.name"
+            :value="index.id"
           />
         </el-select>
       </el-col>
@@ -259,12 +259,21 @@
       </el-col>
       <el-col :span="12">
         <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="filter.currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="filter.pageSize"
+          layout="sizes, prev, pager, next, jumper"
+          :total="filter.totalItems"
+        />
+        <!-- <el-pagination
           v-model:currentPage="filter.page"
           layout="total, prev, pager, next, jumper"
           :total="total"
           background
           @current-change="handleCurrentChange"
-        />
+        /> -->
       </el-col>
     </el-row>
 
@@ -356,13 +365,16 @@ export default {
       isLoading: true,
       multipleSelection: [],
       is_wishlisted: false,
+      commentsList: [],
+      filterIds: [],
       search: '',
       filter: {
         title: '',
         userId: '',
         currentPage: 1,
         page: 1,
-        per_page: 10,
+        pageSize: 10,
+        totalItems: 0
       },
       total: {},
 
@@ -425,7 +437,9 @@ export default {
   },
 	mounted() {
     this.currentPage = 1
-		this.getItem()
+		this.getItem(),
+    this.ChangeCommentsName()
+    this.ChangeName()
 	},
 	methods: {
     changePageOptions(e) {
@@ -442,8 +456,20 @@ export default {
       this.filter.per_page = 10
 
     },
-    handleSizeChange() {
+    // handleSizeChange() {
 
+    // },
+    // handleCurrentChange(page) {
+    //   this.filter.page = page
+    //   this.getItem()
+    // },
+    handleSizeChange(newSize) {
+      this.pageSize = newSize;
+      this.getItem();
+    },
+    handleCurrentChange(newPage) {
+      this.currentPage = newPage;
+      this.getItem();
     },
     handleSelectionChange(row) {
       this.multipleSelection = row;
@@ -455,10 +481,6 @@ export default {
       }
 
     },
-    handleCurrentChange(page) {
-      this.filter.page = page
-      this.getItem()
-    },
     tableRowClassName(row) {
         if (row.is_wishlisted == true) {
           return 'success-row';
@@ -467,10 +489,11 @@ export default {
       },
 		getItem() {
       this.isLoading = true
-			axios.get(`https://dummyjson.com/posts?skip=${this.filter.page}&limit=${this.filter.per_page}`)
+      // ?skip=${this.filter.page}&limit=${this.filter.per_page}
+			axios.get(`https://jsonplaceholder.typicode.com/posts`)
 			.then((response) => {
         this.total = response.data.total
-        this.data = response.data.posts.map(el => {
+        this.data = response.data.splice(0, 100).map(el => {
           return {
             ...el,
             is_wishlisted : false,
@@ -478,18 +501,19 @@ export default {
             isExpandLoading: false
           }
         });
-        var items = []
+        // var 
         var dataIds = this.data.map(el => el.id)
         if(getItem('WishList')){
-          items = JSON.parse(getItem('WishList'))
-          if(items.length > 0){
-            items.forEach(el => {
+          this.filterIds = JSON.parse(getItem('WishList'))
+          if(this.filterIds.length > 0){
+            this.filterIds.forEach(el => {
               if(dataIds.includes(el)){
                 this.data[dataIds.indexOf(el)].is_wishlisted = true
               }
             })
           }
         }
+        this.ChangeWishList()
 			})
        .finally(()=>{
          this.isLoading = false
@@ -612,26 +636,31 @@ export default {
         row.isExpandLoading = false
       })
     },
-    ChangeWishlistTrue(){
-      var wishlists = []
-      var dataIds = this.data.map(el => el.id)
-      if(getItem('WishList')){
-          wishlists = JSON.parse(getItem('WishList'))
-          if(wishlists.length > 0){
-            wishlists.forEach(el => {
-              if(dataIds.includes(el)){
-                this.data[dataIds.indexOf(el)].is_wishlisted = true
-              }
-            })
-          }
-        }
-      
-    },
-    ChangeWishlistFalse() {
-
-    },
     Search(row) {
       this.form.name = row.comments.filter((el) => el.value === row)[0].name;
+    },
+    ChangeName(row) {
+      axios.get(`https://jsonplaceholder.typicode.com/comments?postId=${row}`)
+      .then((response) => {
+        this.commentsList = response.data;
+        this.isExpandLoading = false
+      })
+    },
+    ChangeCommentsName() {
+      // axios.get(`https://jsonplaceholder.typicode.com/comments`)
+      // .then((response) => {
+      //   this.commentsList = response.data;
+      //   this.isExpandLoading = false
+      // })
+    },
+    ChangeWishList() {
+      if (this.filter.title == 2) {
+        const filteredData = this.data.filter(item => this.filterIds.includes(item.id));
+        this.data = filteredData
+      } else if (this.filter.title == 3) {
+        const filteredData = this.data.filter(item => !this.filterIds.includes(item.id));
+        this.data = filteredData
+      }
     }
 	},
 };

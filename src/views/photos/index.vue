@@ -46,13 +46,14 @@
           placeholder="Tanlang"
           style="width: 100%;"
           :value="null"
+          clearable=""
           @change="getItem"
         >
           <el-option
             v-for="index in getWishlist"
             :key="index.id"
             :label="index.name"
-            :value="index.name"
+            :value="index.id"
           />
         </el-select>
       </el-col>
@@ -278,6 +279,7 @@ export default {
       multipleSelection: [],
       itemId: null,
       is_wishlisted_photo: false,
+      filterIds: [],
       radio: '1',
       search: '',
       filter: {
@@ -357,24 +359,24 @@ export default {
       this.isLoading = true
 			axios.get('https://jsonplaceholder.typicode.com/photos')
         .then((response) => {
-        this.data = response.data.splice(1, 50).map(el => {
+        this.data = response.data.splice(1, 100).map(el => {
           return {
             ...el,
             is_wishlisted_photo : false,
           }
         });
-        var items = []
         var dataIds = this.data.map(el => el.id)
         if(getItem('WishListPhoto')){
-          items = JSON.parse(getItem('WishListPhoto'))
-          if(items.length > 0){
-            items.forEach(el => {
+          this.filterIds = JSON.parse(getItem('WishListPhoto'))
+          if(this.filterIds.length > 0){
+            this.filterIds.forEach(el => {
               if(dataIds.includes(el)){
                 this.data[dataIds.indexOf(el)].is_wishlisted_photo = true
               }
             })
           }
         }
+        this.ChangeWishListPhoto()
 			})
        .finally(()=>{
          this.isLoading = false
@@ -489,16 +491,17 @@ export default {
 				})
 			})
     },
-    ChangeWishlist(row){
-      if (row.is_wishlisted_photo == true) {
-        this.getItem()
-      }
-      else {
-        this.getItem()
-      }
-    },
     Search(row) {
       this.form.name = row.comments.filter((el) => el.value === row)[0].name;
+    },
+    ChangeWishListPhoto() {
+     if (this.filter.title == 2) {
+        const filteredData = this.data.filter(item => this.filterIds.includes(item.id));
+        this.data = filteredData
+      } else if (this.filter.title == 3) {
+        const filteredData = this.data.filter(item => !this.filterIds.includes(item.id));
+        this.data = filteredData 
+      }
     }
 	},
 };
