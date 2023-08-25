@@ -10,7 +10,7 @@ export const routes = [
     children: [
       {
         name: "Posts",
-        path: "/posts",
+        path: "/",
         component: () => import("@/views/posts/index.vue"),
         meta: {
           title: "Bosh sahifa",
