@@ -1,9 +1,9 @@
 <template>
   <div class="main">
     <div class="navbar_items d-flex">
-      <Sidebar />
+      <Header />
+      <Sidebar style="margin-top: 70px;" />
       <div class="sidebar__list w-100">
-        <Header />
         <router-view class="router-view" />
       </div>
     </div>
@@ -25,7 +25,7 @@ export default {
 
 <style>
 .router-view {
-  margin-left: 270px;
+  margin-left: 170px;
   
 }
 </style>

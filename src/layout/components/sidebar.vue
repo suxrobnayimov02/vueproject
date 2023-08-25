@@ -2,13 +2,32 @@
   <div class="sidebar">
     <el-row class="sidebar_items">
       <el-col>
+        <!-- <div class="offMobile">
+          <el-radio-group
+            v-model="isCollapse"
+            style="margin-bottom: 20px;"
+            size="sm"
+          >
+            <el-radio-button :label="false">
+              <i
+                class="el-icon-s-fold"
+              />
+            </el-radio-button>
+            <el-radio-button :label="true">
+              <i
+                class="el-icon-s-unfold"
+              />
+            </el-radio-button>
+          </el-radio-group>
+        </div> -->
         <el-menu
           default-active="1"
           class="el-menu-vertical-demo"
+          :collapse="isCollapse"
           @open="handleOpen"
           @close="handleClose"
         >
-          <el-menu-item class="sidebar-logo ">
+          <!-- <el-menu-item class="sidebar-logo ">
             <router-link
               to="/"
             >
@@ -18,7 +37,7 @@
                 style="width: 150px;"
               >
             </router-link>
-          </el-menu-item>
+          </el-menu-item> -->
           <!-- <el-menu-item index="1">
             <router-link
               :to="{ name: 'dashboard' }"
@@ -68,7 +87,7 @@ export default {
   data() {
     return {
       fullscreenLoading: false,
-      isColapse: true
+      isCollapse: false
     }
   },
   methods: {

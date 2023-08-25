@@ -21,7 +21,7 @@ a {
 
 .headers {
     position: fixed;
-    left: 251px;
+    /* left: 251px; */
     color: #111;
     background-color: #fff !important;
     width: 100%;
@@ -34,9 +34,9 @@ a {
     text-align: left;
 }
 
-.sidebar_items {
+/* .sidebar_items {
     min-width: 250px;
-}
+} */
 
 .header_items {
     display: flex;

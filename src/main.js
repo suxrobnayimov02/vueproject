@@ -16,6 +16,7 @@ import Index from "@/mixins/index";
 import "./plugins/apex-chart";
 import "../src/assets/css/style.css";
 import '@/assets/scss/main.scss'
+import '@/assets/scss/responsive.scss'
 // if (process.env.NODE_ENV === 'production') {
 //   const { mockXHR } = require('../mock/article')
 //   mockXHR()

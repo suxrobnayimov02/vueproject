@@ -3,13 +3,13 @@
     <el-menu class="headers" style="z-index: 2;">
       <div class="header_items">
         <div class="d-flex align-items-center">
-          <el-col 
-            v-model="isColapse"
+          <!-- <el-col 
+            v-model="isCollapse"
             :span="1" 
             class="handleOpens" 
           >
             <i class="el-icon-s-fold" />
-          </el-col>
+          </el-col> -->
           <div class="date">
             <i class="el-icon-date" />
             <span class="date_number">{{ date }}</span>

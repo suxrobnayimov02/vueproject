@@ -2,9 +2,9 @@
 <template>
   <div 
     class="app" 
-    style="width: 100%; margin-right: 37px;"
+    style="width: 100%; margin-right: 37px; margin-top: 100px;"
   >
-    <el-row style="width: 100%; margin-top: 100px;">
+    <el-row>
       <el-col :span="21">
         <h2>Postlar ro'yxati</h2>
       </el-col>
@@ -18,10 +18,80 @@
         </el-button>
       </el-col>
     </el-row>
+    <el-row
+      class="main-filter"
+      :gutter="20"
+    >
+      <el-col
+        :span="7"
+        :lg="7"
+        :sm="12"
+      >
+        <label for="">Title</label>
+        <el-input
+          v-model="search"
+          placeholder="Title"
+          clearable
+          @keyup.enter="Search"
+        />
+      </el-col>
+      <el-col
+        :span="7"
+        :lg="7"
+        :sm="12"
+      >
+        <label for="">Name</label>
+        <el-select
+          v-model="filter.name"
+          filterable
+          placeholder="Tanlang"
+          style="width: 100%;"
+        >
+          <el-option
+            v-for="item in data"
+            :key="item.id"
+            :label="item.title"
+            :value="item.title"
+          />
+        </el-select>
+      </el-col>
+      <el-col
+        :span="7"
+        :lg="7"
+        :sm="12"
+      >
+        <label for="">Sevimlilar</label>
+        <el-select 
+          v-model="filter.title" 
+          placeholder="Tanlang"
+          style="width: 100%;"
+          :value="null"
+          @change="getItem"
+        >
+          <el-option
+            v-for="index in getWishlist"
+            :key="index.id"
+            :label="index.name"
+            :value="index.name"
+          />
+        </el-select>
+      </el-col>
+      <el-col :span="3">
+        <el-button 
+          type="primary" 
+          @click="getItem"
+        >
+          <i class="el-icon-search" />
+          Qidirish
+        </el-button>
+      </el-col>
+    </el-row>
     <el-table 
       v-loading="isLoading"
-      :data="data" 
+      :data="dataComputed" 
       border
+      height="500"
+      :row-class-name="tableRowClassName"
       @expand-change="RowExpandChange"
       @selection-change="handleSelectionChange"
     >
@@ -61,10 +131,29 @@
         </template>
       </el-table-column>
       <el-table-column
-        type="selection"
         width="55"
+        type="selection"
         align="center"
-      />
+      >
+        <!-- <el-button></el-button>
+        <el-dropdown>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <i class="el-icon-delete"></i>
+              <span>O'chirish</span>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <div style="display: flex; align-items: center;">
+                <img
+                  src="../../assets/image/love.svg"
+                  width="15"
+                >
+                <span style="margin-left: 5px;">Sevimlilarga qo'shish</span>
+              </div>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown> -->
+      </el-table-column>
       <el-table-column 
         label="Title"
         min-width="300px" 
@@ -151,15 +240,33 @@
       </span>
     </el-dialog>
 
-    <el-pagination
-      :current-page="currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="120"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+    <el-row style="margin-bottom: 50px; margin-top: 30px;">
+      <el-col :span="4">
+        <el-select 
+          v-model="filter.title" 
+          placeholder="10/sahifa"
+          :value="null"
+          @change="changePageOptions"
+          size="mini"
+        >
+          <el-option
+            v-for="ids in pageOptions"
+            :key="ids.id"
+            :label="ids.label"
+            :value="ids.id"
+          />
+        </el-select>
+      </el-col>
+      <el-col :span="12">
+        <el-pagination
+          v-model:currentPage="filter.page"
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          background
+          @current-change="handleCurrentChange"
+        />
+      </el-col>
+    </el-row>
 
     <el-dialog
       :visible="dialogVisible"
@@ -240,27 +347,24 @@ export default {
 	// eslint-disable-next-line vue/multi-word-component-names
 	name: 'Index',
   components: { CustomLabel },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["detail"],
 	data() {
 		return {
 			data: [],
 			dialogVisible: false,
       dialogStatus: '',
-      isLoading: true,
-      checked: true,
-      currentPage: 1,
-      perPage: 10,
-      total: 0,
-      multipleSelection: [],
       dialogDelete: false,
-      itemId: null,
-      addWishlist: {
-        id: '',
-        title: '',
-        body: ''
-      },
+      isLoading: true,
+      multipleSelection: [],
       is_wishlisted: false,
+      search: '',
+      filter: {
+        title: '',
+        userId: '',
+        currentPage: 1,
+        page: 1,
+        per_page: 10,
+      },
+      total: {},
 
 			form: {
         id: '',
@@ -276,21 +380,68 @@ export default {
         update: 'Edit',
         create: 'Create'
       },
+      getWishlist:[ 
+        {
+          id: '1',
+          name: 'Hamma postlar'
+        },
+        {
+          id: '2',
+          name: 'Sevimlilarga qo\'shilganlar'
+        },
+        {
+          id: '3',
+          name: 'Sevimlilarga qo\'shilmaganlar'
+        }
+      ],
+      pageOptions: [
+        {
+          id: 1,
+          label: '10/sahifa'
+        },
+        {
+          id: 2,
+          label: '20/sahifa'
+        },
+        {
+          id: 3,
+          label: '50/sahifa'
+        },
+        {
+          id: 4,
+          label: '100/sahifa'
+        }
+      ]
 		}
 	},
 	
-	created() {
-    
+	computed: {
+    dataComputed() {
+      return this.data.filter(data => !this.search || data.title.toLowerCase().includes(this.search.toLowerCase()))
+    }
+  },
+  created() {
+    this.filter.PageLimit = this.$route.query.PageLimit
   },
 	mounted() {
     this.currentPage = 1
 		this.getItem()
-    this.itemId = this.$route.params.id;
-    if (this.$store.state.WishList != undefined) {
-      this.form = this.$store.state.WishList
-    }
 	},
 	methods: {
+    changePageOptions(e) {
+      if (e == 2) {
+        this.filter.per_page = 20
+        this.getItem()
+      } else if (e == 3) {
+        this.filter.per_page = 50
+        this.getItem()
+      } else if (e == 4) {
+        this.filter.per_page = 100
+        this.getItem()
+      }
+      this.filter.per_page = 10
+
+    },
     handleSizeChange() {
 
     },
@@ -305,21 +456,26 @@ export default {
 
     },
     handleCurrentChange(page) {
-      this.page = page
-      setItem('resumePage', page)
+      this.filter.page = page
       this.getItem()
     },
+    tableRowClassName(row) {
+        if (row.is_wishlisted == true) {
+          return 'success-row';
+        } 
+        return '';
+      },
 		getItem() {
       this.isLoading = true
-			axios.get('https://jsonplaceholder.typicode.com/posts')
+			axios.get(`https://dummyjson.com/posts?skip=${this.filter.page}&limit=${this.filter.per_page}`)
 			.then((response) => {
-        this.data = response.data.map(el => {
+        this.total = response.data.total
+        this.data = response.data.posts.map(el => {
           return {
             ...el,
             is_wishlisted : false,
             comments: [],
-            isExpandLoading: false,
-            is_checked: false
+            isExpandLoading: false
           }
         });
         var items = []
@@ -334,9 +490,10 @@ export default {
             })
           }
         }
-        this.total = response.data.limit
 			})
-        this.isLoading = false
+       .finally(()=>{
+         this.isLoading = false
+       })
 		},
 		saveCreate() {
       axios.post(`https://jsonplaceholder.typicode.com/posts`, this.form)
@@ -454,10 +611,41 @@ export default {
         row.comments = response.data;
         row.isExpandLoading = false
       })
+    },
+    ChangeWishlistTrue(){
+      var wishlists = []
+      var dataIds = this.data.map(el => el.id)
+      if(getItem('WishList')){
+          wishlists = JSON.parse(getItem('WishList'))
+          if(wishlists.length > 0){
+            wishlists.forEach(el => {
+              if(dataIds.includes(el)){
+                this.data[dataIds.indexOf(el)].is_wishlisted = true
+              }
+            })
+          }
+        }
+      
+    },
+    ChangeWishlistFalse() {
+
+    },
+    Search(row) {
+      this.form.name = row.comments.filter((el) => el.value === row)[0].name;
     }
 	},
 };
 </script>
 
 <style>
+.el-table .success-row {
+    background: #f0f9eb;
+  }
+.main-filter {
+  display: flex;
+  align-items: end;
+  width: 100%; 
+  margin-bottom: 20px; 
+  margin-top: 30px;
+}
 </style>

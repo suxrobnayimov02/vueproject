@@ -1,12 +1,8 @@
-<!-- eslint-disable vue/no-deprecated-slot-scope-attribute -->
 <template>
-  <div 
-    class="app" 
-    style="width: 100%; margin-right: 37px;"
-  >
-    <el-row style="width: 100%; margin-top: 100px;">
+  <div style="width: 100%; margin-right: 37px; margin-top: 100px; margin-bottom: 50px;">
+    <el-row>
       <el-col :span="21">
-        <h2>Postlar ro'yxati</h2>
+        <h2>Vazifalar ro'yxati</h2>
       </el-col>
       <el-col :span="3">
         <el-button 
@@ -14,54 +10,101 @@
           @click="create"
         >
           <i class="el-icon-circle-plus-outline" />
-          Post qo'shish
+          Vazifa qo'shish
         </el-button>
       </el-col>
     </el-row>
-    <el-table 
-      v-loading="isLoading"
-      :data="data" 
-      border
-      @selection-change="handleSelectionChange"
+    <el-row
+      class="main-filter"
+      :gutter="20"
     >
-      <el-table-column 
-        type="expand"
-        min-width="300px" 
+      <el-col
+        :span="7"
+        :lg="7"
+        :sm="12"
       >
-        <template slot-scope="{row}">
-          <span style="padding-left: 50px;">{{ row.title }}</span>
-        </template>
-      </el-table-column>
+        <label for="">Vazifa nomi</label>
+        <el-input
+          v-model="search"
+          placeholder="Qidiruv"
+          clearable
+          @keyup.enter="Search"
+        />
+      </el-col>
+      <el-col
+        :span="7"
+        :lg="7"
+        :sm="12"
+      >
+        <label for="">Name</label>
+        <el-select
+          v-model="status.name"
+          filterable
+          placeholder="Tanlang"
+          style="width: 100%;"
+          @change="ChangeStatus"
+        >
+          <el-option
+            v-for="item in status"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-col>
+      <el-col :span="3">
+        <el-button 
+          type="primary" 
+          @click="getItem"
+        >
+          <i class="el-icon-search" />
+          Qidirish
+        </el-button>
+      </el-col>
+    </el-row>
+    <el-table
+      v-loading="isLoading"
+      :data="dataComputed"
+      border
+      height="450"
+      style="width: 100%"
+    >
       <el-table-column
-        type="selection"
-        width="55"
+        prop="id"
+        label="ID"
+        width="70"
         align="center"
       />
-      <!-- <el-table-column 
-        label="ID"
-        prop="id"
-        width="60" 
+      <el-table-column
+        prop="title"
+        label="Vazifa"
+        min-width="280"
+      />
+      <el-table-column
+        label="Holati"
         align="center"
-      /> -->
-      <el-table-column 
-        label="Title"
-        min-width="300px" 
       >
-        <template slot-scope="{row}">
-          <span>{{ row.title }}</span>
+        <template #default="{row}">
+          <el-tag
+            v-if="row.completed == true"
+            type="success"
+          >
+            Tasdiqlangan
+          </el-tag>
+          <el-tag
+            v-else
+            type="danger"
+          >
+            Tasdiqlanmagan
+          </el-tag>
         </template>
       </el-table-column>
-      <el-table-column 
-        prop="body" 
-        label="Body" 
-        min-width="400px"
-      />
       <el-table-column 
         label="Status"
         min-width="200px"
         align="center"
       >
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button 
             size="medium"
             circle
@@ -83,62 +126,9 @@
             circle
             @click="() => {form = scope.row, dialogDelete = true}" 
           />
-          <el-button 
-            v-if="!scope.row.is_wishlisted"
-            size="medium"
-            circle
-            @click="addToWishlist(scope.row)" 
-          >
-            <img
-              src="../../assets/image/love.svg"
-              width="15"
-            >
-          </el-button>
-          <el-button
-            v-else
-            size="medium"
-            circle
-            @click="unAddToWishlist(scope.row)" 
-          >
-            <img
-              src="../../assets/image/loved.svg"
-              width="15"
-            >
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog
-      title="Warning"
-      :visible="dialogDelete"
-      width="30%"
-    >
-      <span>It should be noted that the content will not be aligned in center by default</span>
-      <span
-        slot="footer"
-        class="dialog-footer"
-      >
-        <el-button
-          type="primary"
-          @click="dialogDelete = false"
-        >Orqaga</el-button>
-        <el-button
-          type="danger"
-          @click="Delete(form.id)"
-        >O'chirish</el-button>
-      </span>
-    </el-dialog>
-
-    <el-pagination
-      :current-page="currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="120"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-
     <el-dialog
       :visible="dialogVisible"
       :title="textMap[dialogStatus]"
@@ -151,22 +141,11 @@
       >
         <el-form-item 
           v-if="dialogStatus != 'view'"
-          label="Title"
+          label="Vazifa nomi"
           prop="title"
         >
           <el-input 
             v-model="form.title"
-          />
-        </el-form-item>
-        <el-form-item 
-          v-if="dialogStatus != 'view'"
-          prop="body"
-          label="Textarea"
-        >
-          <el-input 
-            v-model="form.body" 
-            :rows="4"
-            type="textarea"
           />
         </el-form-item>
         <el-form-item v-if="dialogStatus == 'view'">
@@ -175,10 +154,31 @@
             :content="form.title" 
           />
         </el-form-item>
-        <el-form-item v-if="dialogStatus == 'view'">
-          <custom-label 
-            label="Body"
-            :content="form.body"
+        <el-form-item v-if="dialogStatus != 'create' || dialogStatus != 'update'">
+          <span>Holati</span>
+          <div>
+            <el-tag
+              v-if="form.completed == true"
+              type="success"
+            >
+              Tasdiqlangan
+            </el-tag>
+            <el-tag
+              v-else
+              type="danger"
+            >
+              Tasdiqlanmagan
+            </el-tag>
+          </div>
+        </el-form-item>
+        <el-form-item v-if="dialogStatus == 'create' || dialogStatus == 'update'">
+          <el-switch
+            v-model="form.completed"
+            style="display: block"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="Tasdiqlangan"
+            inactive-text="Tasdiqlanmagan" 
           />
         </el-form-item>
       </el-form>
@@ -207,107 +207,162 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-dialog
+      title="Warning"
+      :visible="dialogDelete"
+      width="30%"
+    >
+      <span>It should be noted that the content will not be aligned in center by default</span>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          type="primary"
+          @click="dialogDelete = false"
+        >Orqaga</el-button>
+        <el-button
+          type="danger"
+          @click="Delete(form.id)"
+        >O'chirish</el-button>
+      </span>
+    </el-dialog>
+    <el-pagination
+      :current-page="filter.currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="filter.page"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="todos.length"
+      @current-change="handleCurrentChange"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { setItem, getItem } from "@/utils/storage";
 import CustomLabel from '@/components/customLabel.vue';
 export default {
-	// eslint-disable-next-line vue/multi-word-component-names
-	name: 'Index',
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: "Tasks",
   components: { CustomLabel },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["detail"],
-	data() {
-		return {
-			data: [],
-			dialogVisible: false,
+  data() {
+    return {
+      todos: [],
+      dialogVisible: false,
       dialogStatus: '',
-      isLoading: true,
-      checked: true,
-      currentPage: 1,
-      perPage: 10,
-      total: 0,
-      multipleSelection: [],
       dialogDelete: false,
-      itemId: null,
-      addWishlist: {
+      isLoading: false,
+      search: '',
+      form: {
         id: '',
         title: '',
-        body: ''
+        completed: ''
       },
-      is_wishlisted: false,
-
-			form: {
-        id: '',
-				title: '',
-				body: ''
-			},
-			rules: {
-        title: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
-        body: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
-      },
+      status: [
+        {
+          id: 1,
+          name: 'Barchasi'
+        },
+        {
+          id: 2,
+          name: 'Tasdiqlangan'
+        },
+        {
+          id: 3,
+          name: 'Tasdiqlanmagan'
+        }
+      ],
       textMap: {
         view: 'View',
         update: 'Edit',
         create: 'Create'
       },
-		}
-	},
-	
-	created() {
-    
-  },
-	mounted() {
-    this.currentPage = 1
-		this.getItem()
-    this.itemId = this.$route.params.id;
-    if (this.$store.state.WishList != undefined) {
-      this.form = this.$store.state.WishList
+      filter: {
+        title: '',
+        userId: '',
+        currentPage: 1,
+        page: 10,
+        per_page: null,
+        total: 0,
+      },
+      rules: {
+        title: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }],
+        completed: [{ required: true, message: `Iltimos, ushbu maydonni to'ldiring`, trigger: 'change' }]
+      },
     }
-	},
-	methods: {
-    handleSizeChange() {
 
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    handleCurrentChange(page) {
-      this.page = page
-      setItem('resumePage', page)
-      this.getItem()
-    },
-		getItem() {
+  },
+  computed: {
+    dataComputed() {
+      return this.todos.filter(data => !this.search || data.title.toLowerCase().includes(this.search.toLowerCase()))
+    }
+  },
+  created() {
+    this.getItem()
+  },
+  methods: {
+    getItem() {
       this.isLoading = true
-			axios.get('https://jsonplaceholder.typicode.com/posts')
-			.then((response) => {
-        this.data = response.data.map(el => {
-          return {
-            ...el,
-            is_wishlisted : false
-          }
-        });
-        var items = []
-        var dataIds = this.data.map(el => el.id)
-        if(getItem('WishList')){
-          items = JSON.parse(getItem('WishList'))
-          if(items.length > 0){
-            items.forEach(el => {
-              if(dataIds.includes(el)){
-                this.data[dataIds.indexOf(el)].is_wishlisted = true
-              }
-            })
-          }
-        }
-        this.total = response.data.limit
+			axios.get(`https://jsonplaceholder.typicode.com/todos`)
+			.then((res) => {
+       this.todos = res.data.splice(0, 50)
 			})
-        this.isLoading = false
+       .finally(()=>{
+         this.isLoading = false
+       })
+    },
+    ChangeStatus(e) {
+      // var datastatus = []
+
+      if (e == 1) {
+        this.getItem()
+      } else if (e == 2) {
+        this.getItem()
+      }
+    },
+    create() {
+      this.form = {
+        title: '',
+        body: ''
+      }
+			this.dialogVisible = true
+      this.dialogStatus = 'create'
 		},
-		saveCreate() {
-      axios.post(`https://jsonplaceholder.typicode.com/posts`, this.form)
+    Edit(row) {
+      this.dialogStatus = 'update'
+      this.form = Object.assign({}, row)
+      this.dialogVisible = true
+       
+    },
+    View(row) {
+      this.dialogStatus = 'view'
+      this.form = Object.assign({}, row)
+      this.dialogVisible = true
+		},
+    Delete(item) {
+      this.dialogDelete = true 
+      axios.delete(`https://jsonplaceholder.typicode.com/todos/${item}`)
+      .then((response) => {
+        this.items = response.data;
+        this.dialogDelete = false
+				this.$notify({
+          title: 'Success',
+					message: 'Delete Successfully',
+					type: 'success',
+					duration: 1000
+				})
+      })
+      .catch(() => {
+        this.$notify({
+          title: 'Error',
+					message: 'Delete Error',
+					type: 'error',
+					duration: 1000
+				})
+			})
+    },
+    saveCreate() {
+      axios.post(`https://jsonplaceholder.typicode.com/todos`, this.form)
 			.then(() => {
         this.getItem(),
 				this.dialogVisible = false
@@ -328,7 +383,7 @@ export default {
 			})
 		},
     saveUpdate(id) {
-      axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, this.form)
+      axios.put(`https://jsonplaceholder.typicode.com/todos/${id}`, this.form)
 			.then(() => {
         this.getItem(),
 				this.dialogVisible = false
@@ -348,76 +403,23 @@ export default {
 				})
 			})
     },
-    addToWishlist(row) {
-      var items = []
-      if(getItem('WishList')){
-        items = JSON.parse(getItem('WishList'))
-      }
-      if(!items.includes(row.id)){
-        items.push(row.id)
-      }
-      setItem('WishList', JSON.stringify(items))
-      row.is_wishlisted = true
+    handleSizeChange() {
+
     },
-    unAddToWishlist(row) {
-      var items = []
-      if(getItem('WishList')){
-        items = JSON.parse(getItem('WishList'))
-      }
-      if(items.includes(row.id)){
-        items.splice(items.indexOf(row.id), 1)
-      }
-      setItem('WishList', JSON.stringify(items))
-      row.is_wishlisted = false
+    handleCurrentChange(page) {
+      this.filter.page = page
+      this.getItem()
     },
-		View(row) {
-      this.dialogStatus = 'view'
-      this.form = Object.assign({}, row)
-      this.dialogVisible = true
-			// this.$router.push({
-			// 	name: 'detail',
-			// 	params: { detail:row }
-			// })
-		},
-		create() {
-      this.form = {
-        title: '',
-        body: ''
-      }
-			this.dialogVisible = true
-      this.dialogStatus = 'create'
-		},
-    Edit(row) {
-      this.dialogStatus = 'update'
-      this.form = Object.assign({}, row)
-      this.dialogVisible = true
-       
-    },
-    Delete(item) {
-      this.dialogDelete = true 
-      axios.delete(`https://jsonplaceholder.typicode.com/posts/${item}`)
-      .then((response) => {
-        this.items = response.data;
-        this.dialogDelete = false
-				this.$notify({
-          title: 'Success',
-					message: 'Delete Successfully',
-					type: 'success',
-					duration: 1000
-				})
-      })
-      .catch(() => {
-        this.$notify({
-          title: 'Error',
-					message: 'Delete Error',
-					type: 'error',
-					duration: 1000
-				})
-			})
-    }
-	},
-};
+  },
+}
 </script>
 
 <style>
+.main-filter {
+  display: flex;
+  align-items: end;
+  width: 100%; 
+  margin-bottom: 20px; 
+  margin-top: 30px;
+}
 </style>
